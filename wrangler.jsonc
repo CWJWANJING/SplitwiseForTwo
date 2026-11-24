@@ -1,0 +1,30 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "splitpair",
+  "main": "src/worker.js",
+  "compatibility_date": "2025-09-01",
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "splitpair",
+      // Replace with the id printed by `npx wrangler d1 create splitpair`
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations"
+    }
+  ],
+  // Runs once a day to create due recurring transactions (they are also created lazily on load).
+  "triggers": { "crons": ["15 6 * * *"] },
+  "vars": {
+    "USER1_NAME": "Me",
+    "USER2_NAME": "Partner",
+    "TIMEZONE": "America/New_York"
+  }
+  // Secrets (not stored here): USER1_PASSWORD, USER2_PASSWORD, SESSION_SECRET
+  //   npx wrangler secret put USER1_PASSWORD
+}
